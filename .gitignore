@@ -1,6 +1,8 @@
 specs
 implementation_plan
 README.md
+DEPLOYMENT.md
+SINGLE_IMAGE_CHANGES.md
 
 # Dependencies
 node_modules/

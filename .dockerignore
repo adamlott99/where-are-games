@@ -1,0 +1,46 @@
+# Node modules
+**/node_modules
+**/npm-debug.log
+
+# Build artifacts
+backend/dist
+frontend/build
+
+# Git
+.git
+.gitignore
+
+# Docker
+docker-compose.yml
+backend/Dockerfile
+frontend/Dockerfile
+Dockerfile.old
+
+# Environment files (use environment variables instead)
+.env
+.env.*
+
+# Documentation
+README.md
+implementation_plan/
+specs/
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database (will be created at runtime)
+backend/database/*.db
+
+# Tests
+**/*.test.ts
+**/*.test.tsx
+**/setupTests.ts
+

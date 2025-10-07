@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: where-are-games
+    runtime: docker
+    plan: free
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SITE_PASSWORD
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+    disk:
+      name: database
+      mountPath: /app/database
+      sizeGB: 1
+
