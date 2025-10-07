@@ -1,0 +1,58 @@
+.current-date-status {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  margin-bottom: 20px;
+}
+
+.status-heading {
+  color: #2c2c2c;
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  text-align: left;
+}
+
+.status-claimed,
+.status-unclaimed {
+  padding: 0;
+  text-align: left;
+}
+
+.current-date-status p {
+  color: #2c2c2c;
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.current-date-status .notes {
+  color: #6b6b6b;
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .current-date-status {
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .status-heading {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .status-claimed,
+  .status-unclaimed {
+    padding: 0;
+  }
+  
+  .current-date-status p {
+    font-size: 15px;
+  }
+  
+  .current-date-status .notes {
+    font-size: 13px;
+  }
+}
