@@ -23,7 +23,7 @@ const HostingSlotsList: React.FC<HostingSlotsListProps> = ({ onDeleteSlot }) => 
   const formatDate = (dateString: string): string => {
     const [year, month, day] = dateString.split('-').map(Number);
     const date = new Date(year, month - 1, day);
-    const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'short' });
+    const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'short', timeZone: 'America/Chicago' });
     return `${dayOfWeek} ${dateString}`;
   };
 

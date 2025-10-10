@@ -7,10 +7,12 @@ const CurrentDateStatus: React.FC = () => {
   const { slots } = useHostingSlots();
 
   const getCurrentDateString = (): string => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
+    const now = new Date();
+    // Convert to America/Chicago timezone
+    const chicagoTime = new Date(now.toLocaleString("en-US", {timeZone: "America/Chicago"}));
+    const year = chicagoTime.getFullYear();
+    const month = String(chicagoTime.getMonth() + 1).padStart(2, '0');
+    const day = String(chicagoTime.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   };
 

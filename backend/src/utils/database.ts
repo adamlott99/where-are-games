@@ -1,8 +1,10 @@
 import sqlite3 from 'sqlite3';
 import path from 'path';
 import fs from 'fs';
+import { toZonedTime, format } from 'date-fns-tz';
 
 const DATABASE_PATH = path.join(__dirname, '../../database/hosting_slots.db');
+const CHICAGO_TIMEZONE = 'America/Chicago';
 
 export class Database {
   private db!: sqlite3.Database;
@@ -45,13 +47,18 @@ export class Database {
 
   getAllUpcomingHostingSlots(): Promise<any[]> {
     return new Promise((resolve, reject) => {
+      // Get current date in Chicago timezone
+      const now = new Date();
+      const chicagoDate = toZonedTime(now, CHICAGO_TIMEZONE);
+      const chicagoDateString = format(chicagoDate, 'yyyy-MM-dd');
+      
       const query = `
         SELECT * FROM hosting_slots 
-        WHERE hosting_date >= date('now', 'localtime') 
+        WHERE hosting_date >= ? 
         ORDER BY hosting_date ASC
       `;
       
-      this.db.all(query, [], (err, rows) => {
+      this.db.all(query, [chicagoDateString], (err, rows) => {
         if (err) {
           reject(err);
         } else {

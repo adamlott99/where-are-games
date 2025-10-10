@@ -1,6 +1,22 @@
 import { Request, Response } from 'express';
 import { database } from '../utils/database';
 import { CreateHostingSlotRequest, UpdateHostingSlotRequest, ApiResponse, HostingSlot } from '../types';
+import { fromZonedTime, toZonedTime, format } from 'date-fns-tz';
+
+const CHICAGO_TIMEZONE = 'America/Chicago';
+
+// Helper function to get current date in America/Chicago timezone
+const getChicagoDate = (): Date => {
+  const now = new Date();
+  return toZonedTime(now, CHICAGO_TIMEZONE);
+};
+
+// Helper function to format date for day of week display in Chicago timezone
+const formatDateInChicago = (dateString: string): string => {
+  const [year, month, day] = dateString.split('-').map(Number);
+  const date = new Date(year, month - 1, day);
+  return format(date, 'EEE', { timeZone: CHICAGO_TIMEZONE });
+};
 
 export const getAllHostingSlots = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -33,11 +49,11 @@ export const createHostingSlot = async (req: Request, res: Response): Promise<vo
     }
 
     const hostingDate = new Date(slotData.hosting_date + 'T00:00:00');
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const chicagoToday = getChicagoDate();
+    chicagoToday.setHours(0, 0, 0, 0);
     
-    if (hostingDate < today) {
-      const dayOfWeek = hostingDate.toLocaleDateString('en-US', { weekday: 'short' });
+    if (hostingDate < chicagoToday) {
+      const dayOfWeek = formatDateInChicago(slotData.hosting_date);
       const response: ApiResponse = {
         success: false,
         error: `${dayOfWeek} ${slotData.hosting_date} is in the past`
@@ -58,8 +74,7 @@ export const createHostingSlot = async (req: Request, res: Response): Promise<vo
     let errorMessage = 'Failed to create hosting slot';
     
     if (error.message && error.message.includes('UNIQUE constraint failed')) {
-      const date = new Date(req.body.hosting_date + 'T00:00:00');
-      const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'short' });
+      const dayOfWeek = formatDateInChicago(req.body.hosting_date);
       errorMessage = `${dayOfWeek} ${req.body.hosting_date} is already taken`;
     }
     
@@ -95,11 +110,11 @@ export const updateHostingSlot = async (req: Request, res: Response): Promise<vo
     }
 
     const hostingDate = new Date(slotData.hosting_date + 'T00:00:00');
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const chicagoToday = getChicagoDate();
+    chicagoToday.setHours(0, 0, 0, 0);
     
-    if (hostingDate < today) {
-      const dayOfWeek = hostingDate.toLocaleDateString('en-US', { weekday: 'short' });
+    if (hostingDate < chicagoToday) {
+      const dayOfWeek = formatDateInChicago(slotData.hosting_date);
       const response: ApiResponse = {
         success: false,
         error: `${dayOfWeek} ${slotData.hosting_date} is in the past`
@@ -128,8 +143,7 @@ export const updateHostingSlot = async (req: Request, res: Response): Promise<vo
     let errorMessage = 'Failed to update hosting slot';
     
     if (error.message && error.message.includes('UNIQUE constraint failed')) {
-      const date = new Date(req.body.hosting_date + 'T00:00:00');
-      const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'short' });
+      const dayOfWeek = formatDateInChicago(req.body.hosting_date);
       errorMessage = `${dayOfWeek} ${req.body.hosting_date} is already taken`;
     }
     
