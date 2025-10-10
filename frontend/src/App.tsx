@@ -27,7 +27,7 @@ const AppContent: React.FC = () => {
     try {
       await deleteSlot(id);
     } catch (error) {
-      console.error('Failed to delete slot:', error);
+      // Error handling is done in the context
     }
   };
 

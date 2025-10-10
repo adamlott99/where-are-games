@@ -28,6 +28,7 @@ export class Database {
         host_name TEXT NOT NULL,
         host_address TEXT NOT NULL,
         hosting_date DATE NOT NULL UNIQUE,
+        start_time TIME NOT NULL,
         additional_notes TEXT,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
       );
@@ -37,9 +38,7 @@ export class Database {
 
     this.db.exec(schema, (err) => {
       if (err) {
-        console.error('Error creating tables:', err);
-      } else {
-        console.log('Database tables created successfully');
+        throw err;
       }
     });
   }
@@ -48,7 +47,7 @@ export class Database {
     return new Promise((resolve, reject) => {
       const query = `
         SELECT * FROM hosting_slots 
-        WHERE hosting_date >= date('now') 
+        WHERE hosting_date >= date('now', 'localtime') 
         ORDER BY hosting_date ASC
       `;
       
@@ -65,11 +64,11 @@ export class Database {
   createHostingSlot(slot: any): Promise<number> {
     return new Promise((resolve, reject) => {
       const query = `
-        INSERT INTO hosting_slots (host_name, host_address, hosting_date, additional_notes)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO hosting_slots (host_name, host_address, hosting_date, start_time, additional_notes)
+        VALUES (?, ?, ?, ?, ?)
       `;
       
-      this.db.run(query, [slot.host_name, slot.host_address, slot.hosting_date, slot.additional_notes || null], function(err) {
+      this.db.run(query, [slot.host_name, slot.host_address, slot.hosting_date, slot.start_time, slot.additional_notes || null], function(err) {
         if (err) {
           reject(err);
         } else {
@@ -93,15 +92,26 @@ export class Database {
     });
   }
 
-  getHostingSlotById(id: number): Promise<any> {
+  updateHostingSlot(id: number, slot: any): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      const query = 'SELECT * FROM hosting_slots WHERE id = ?';
+      const query = `
+        UPDATE hosting_slots 
+        SET host_name = ?, host_address = ?, hosting_date = ?, start_time = ?, additional_notes = ?
+        WHERE id = ?
+      `;
       
-      this.db.get(query, [id], (err, row) => {
+      this.db.run(query, [
+        slot.host_name, 
+        slot.host_address, 
+        slot.hosting_date, 
+        slot.start_time, 
+        slot.additional_notes || null, 
+        id
+      ], function(err) {
         if (err) {
           reject(err);
         } else {
-          resolve(row);
+          resolve(this.changes > 0);
         }
       });
     });

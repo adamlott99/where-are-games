@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { HostingSlot, CreateHostingSlotRequest } from '../types';
+import { HostingSlot, CreateHostingSlotRequest, UpdateHostingSlotRequest } from '../types';
 import { hostingSlotsService } from '../services/api';
 
 interface HostingSlotsContextType {
@@ -8,6 +8,7 @@ interface HostingSlotsContextType {
   error: string | null;
   fetchSlots: () => Promise<void>;
   createSlot: (slotData: CreateHostingSlotRequest) => Promise<void>;
+  updateSlot: (id: number, slotData: UpdateHostingSlotRequest) => Promise<void>;
   deleteSlot: (id: number) => Promise<void>;
 }
 
@@ -52,6 +53,15 @@ export const HostingSlotsProvider: React.FC<HostingSlotsProviderProps> = ({ chil
     }
   };
 
+  const updateSlot = async (id: number, slotData: UpdateHostingSlotRequest): Promise<void> => {
+    try {
+      await hostingSlotsService.updateSlot(id, slotData);
+      await fetchSlots(); // Refresh the list
+    } catch (err) {
+      throw err;
+    }
+  };
+
   const deleteSlot = async (id: number): Promise<void> => {
     try {
       await hostingSlotsService.deleteSlot(id);
@@ -71,6 +81,7 @@ export const HostingSlotsProvider: React.FC<HostingSlotsProviderProps> = ({ chil
     error,
     fetchSlots,
     createSlot,
+    updateSlot,
     deleteSlot
   };
 

@@ -57,6 +57,13 @@
   width: 140px;
 }
 
+.slot-time-cell {
+  color: #404040;
+  font-weight: 500;
+  white-space: nowrap;
+  width: 120px;
+}
+
 .slot-host-cell {
   font-weight: 500;
 }
@@ -73,9 +80,33 @@
 }
 
 .slot-actions-cell {
-  width: 40px;
+  width: 80px;
   text-align: center;
   padding: 8px !important;
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit-button {
+  background: transparent;
+  color: #404040;
+  border: none;
+  padding: 4px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+}
+
+.edit-button:hover {
+  color: #2c2c2c;
 }
 
 .delete-button {
@@ -178,6 +209,24 @@
   background: white;
   color: #2c2c2c;
 }
+
+.inline-time-picker {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.inline-time-picker .time-hour,
+.inline-time-picker .time-minute {
+  flex: 1;
+  min-width: 60px;
+  padding: 4px 6px;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  font-size: 12px;
+  background: white;
+}
+
 
 .inline-input:focus {
   outline: none;

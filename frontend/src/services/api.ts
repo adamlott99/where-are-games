@@ -1,11 +1,8 @@
 import axios from 'axios';
-import { HostingSlot, CreateHostingSlotRequest, LoginRequest, LoginResponse, ApiResponse } from '../types';
+import { HostingSlot, CreateHostingSlotRequest, UpdateHostingSlotRequest, LoginResponse, ApiResponse } from '../types';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3001');
 
-console.log('API_BASE_URL:', API_BASE_URL);
-console.log('REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
-console.log('NODE_ENV:', process.env.NODE_ENV);
 
 const api = axios.create({
   baseURL: `${API_BASE_URL}/api`,
@@ -59,9 +56,20 @@ export const hostingSlotsService = {
   },
 
   createSlot: async (slotData: CreateHostingSlotRequest): Promise<void> => {
-    const response = await api.post<ApiResponse>('/hosting-slots', slotData);
+    try {
+      const response = await api.post<ApiResponse>('/hosting-slots', slotData);
+      if (!response.data.success) {
+        throw new Error(response.data.error || 'Failed to create hosting slot');
+      }
+    } catch (error: any) {
+      throw error;
+    }
+  },
+
+  updateSlot: async (id: number, slotData: UpdateHostingSlotRequest): Promise<void> => {
+    const response = await api.put<ApiResponse>(`/hosting-slots/${id}`, slotData);
     if (!response.data.success) {
-      throw new Error(response.data.error || 'Failed to create hosting slot');
+      throw new Error(response.data.error || 'Failed to update hosting slot');
     }
   },
 

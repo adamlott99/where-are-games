@@ -8,15 +8,12 @@ const CurrentDateStatus: React.FC = () => {
 
   const getCurrentDateString = (): string => {
     const today = new Date();
-    return today.toISOString().split('T')[0];
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   };
 
-  const formatDate = (dateString: string): string => {
-    const [year, month, day] = dateString.split('-').map(Number);
-    const date = new Date(year, month - 1, day);
-    const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'short' });
-    return `${dayOfWeek} ${dateString}`;
-  };
 
   const currentDate = getCurrentDateString();
   const todaySlot = slots.find((slot: HostingSlot) => slot.hosting_date === currentDate);
@@ -36,7 +33,7 @@ const CurrentDateStatus: React.FC = () => {
     <div className="current-date-status">
       <h2 className="status-heading">Where are games today?</h2>
       <div className="status-claimed">
-        <p>{todaySlot.host_name} — {todaySlot.host_address}</p>
+        <p>{todaySlot.host_name} — {todaySlot.host_address} — {todaySlot.start_time}</p>
         {todaySlot.additional_notes && (
           <p className="notes">{todaySlot.additional_notes}</p>
         )}

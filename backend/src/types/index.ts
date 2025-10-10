@@ -3,6 +3,7 @@ export interface HostingSlot {
   host_name: string;
   host_address: string;
   hosting_date: string;
+  start_time: string;
   additional_notes?: string;
   created_at: string;
 }
@@ -11,6 +12,15 @@ export interface CreateHostingSlotRequest {
   host_name: string;
   host_address: string;
   hosting_date: string;
+  start_time: string;
+  additional_notes?: string;
+}
+
+export interface UpdateHostingSlotRequest {
+  host_name: string;
+  host_address: string;
+  hosting_date: string;
+  start_time: string;
   additional_notes?: string;
 }
 

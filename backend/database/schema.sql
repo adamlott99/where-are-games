@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS hosting_slots (
     host_name TEXT NOT NULL,
     host_address TEXT NOT NULL,
     hosting_date DATE NOT NULL UNIQUE,
+    start_time TIME NOT NULL,
     additional_notes TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
